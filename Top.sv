@@ -1,5 +1,6 @@
 module top;
     import uvm_pkg ::* ;
+    import SynchFifo_pkg::*;
     `include "uvm_macros.svh"; 
     
     initial begin 
