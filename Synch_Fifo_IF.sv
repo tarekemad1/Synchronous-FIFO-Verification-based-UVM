@@ -6,13 +6,19 @@ interface SF_IF(input clk) ;
     bit[7:0] data_out   ;
     logic full          ; 
     logic empty         ;
-    clocking cb @(posedge clk );
+    clocking cb_monitor @(posedge clk );
         input full      ;
         input empty     ; 
         input data_out  ;
-        output w_en     ; 
-        output r_en     ; 
-        output data_in  ;
+        input w_en     ; 
+        input r_en     ; 
+        input  data_in  ;
     endclocking
-    modport Test (clocking cb ,output rst_n); 
+    modport IF_MONITOR (clocking cb_monitor ,input rst_n); 
+    clocking cb_driver @(posedge clk); 
+        output data_in ;
+        output w_en ; 
+        output r_en ; 
+    endclocking
+    modport IF_DRIVER (clocking cb_driver ,output rst_n);
 endinterface

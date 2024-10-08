@@ -6,6 +6,7 @@ package SynchFifo_pkg;
     `include "sequencer.svh";
     `include "base_sequence.svh";
     `include "monitor.svh";
+    `include "driver.svh";
     `include "agent.svh";
     `include "coverage.svh";
     `include "env.svh";
