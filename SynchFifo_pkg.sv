@@ -9,8 +9,15 @@ package SynchFifo_pkg;
     `include "driver.svh";
     `include "agent.svh";
     `include "coverage.svh";
+    `include "scoreboard.svh";
     `include "env.svh";
     `include "base_test.svh";
+    `include "read_seq.svh";
+    `include "write_seq.svh";
+    `include "reset_seq.svh";
+    `include "random_seq.svh";
+    `include "full_test.svh";
+
     
     
 endpackage

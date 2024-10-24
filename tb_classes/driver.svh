@@ -21,10 +21,19 @@ class driver extends uvm_driver#(sequence_item);
         end 
     endtask
     task tb_driver();
-        vif.IF_DRIVER.rst_n   = item.rst_n; 
-        vif.IF_DRIVER.data_in = item.data_in; 
-        vif.IF_DRIVER.r_en    = item.r_en ; 
-        vif.IF_DRIVER.w_en    = item.w_en ; 
+        if(item.w_en) begin;
+            vif.IF_DRIVER.rst_n   = item.rst_n; 
+            vif.IF_DRIVER.data_in = item.data_in; 
+            vif.IF_DRIVER.w_en    = item.w_en ; 
+            vif.IF_DRIVER.r_en    = item.r_en ; 
+        end 
+        else if(item.r_en) begin 
+            vif.IF_DRIVER.r_en    = item.r_en ; 
+        end 
+        
+        
+        
+        
     endtask
 
 endclass

@@ -12,13 +12,16 @@ interface SF_IF(input clk) ;
         input data_out  ;
         input w_en     ; 
         input r_en     ; 
-        input  data_in  ;
+        input data_in  ;
     endclocking
     modport IF_MONITOR (clocking cb_monitor ,input rst_n); 
     clocking cb_driver @(posedge clk); 
         output data_in ;
         output w_en ; 
         output r_en ; 
+        input full; 
+        input empty ; 
+        input data_out; 
     endclocking
     modport IF_DRIVER (clocking cb_driver ,output rst_n);
 endinterface
