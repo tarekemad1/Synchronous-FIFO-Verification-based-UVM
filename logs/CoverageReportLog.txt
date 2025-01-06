@@ -1,0 +1,245 @@
+QuestaSim-64 vcover 10.6c Coverage Utility 2017.07 Jul 26 2017
+Start time: 21:37:30 on Jan 06,2025
+vcover report full_test.ucdb -details 
+Coverage Report by file with details
+
+=================================================================================
+=== File: rtl/synch_fifo.v
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           14        14         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file rtl/synch_fifo.v --
+
+    1                                                module synch_fifo #(parameter DEPTH = 8, DATA_WIDTH = 8) (
+    2                                                  input clk, rst_n,
+    3                                                  input wr_en, rd_en,
+    4                                                  input [DATA_WIDTH-1:0] data_in,
+    5                                                  output reg [DATA_WIDTH-1:0] data_out,
+    6                                                  output full, empty
+    7                                                );
+    8                                                
+    9                                                  // Internal signals
+    10                                                 reg [DATA_WIDTH-1:0] fifo_mem [DEPTH-1:0];  // FIFO memory
+    11                                                 reg [DEPTH-1:0] wr_ptr, rd_ptr;             // Write and read pointers
+    12                                                 reg [DEPTH:0] fifo_count;                   // FIFO count
+    13                                               
+    14                                                 // Write operation
+    15              1                         38       always @(posedge clk or negedge rst_n) begin
+    16                                                   if (~rst_n) begin
+    17              1                          5           wr_ptr <= 0;
+    18              1                          5           fifo_count <= 0;
+    19                                                   end else if (wr_en && !full) begin
+    20              1                          8           fifo_mem[wr_ptr] <= data_in;
+    21              1                          8           wr_ptr <= wr_ptr + 1;
+    22              1                          8           fifo_count <= fifo_count + 1;
+    23                                                   end
+    24                                                 end
+    25                                               
+    26                                                 // Read operation
+    27              1                         29       always @(posedge clk or negedge rst_n) begin
+    28                                                   if (~rst_n) begin
+    29              1                          3           rd_ptr <= 0;
+    30              1                          3           data_out <= {DATA_WIDTH{1'b0}};  // Initialize data_out to a known value on reset
+    31                                                   end else if (rd_en && !empty) begin
+    32              1                          8           data_out <= fifo_mem[rd_ptr];  // Update data_out with valid data
+    33              1                          8           rd_ptr <= rd_ptr + 1;
+    34              1                          8           fifo_count <= fifo_count - 1;
+    35                                                   end
+    36                                                 end
+    37                                               
+    38                                                 // Full and empty flags
+    39              1                         18       assign full = (fifo_count == DEPTH);
+    40              1                         18       assign empty = (fifo_count == 0);
+    41                                               
+    42                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         6         6         0     100.0
+
+================================Branch Details================================
+
+Branch Coverage for file rtl/synch_fifo.v --
+
+------------------------------------IF Branch------------------------------------
+    16                                        38     Count coming in to IF
+    16              1                          5         if (~rst_n) begin
+    19              1                          8         end else if (wr_en && !full) begin
+                                              25     All False Count
+Branch totals: 3 hits of 3 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    28                                        29     Count coming in to IF
+    28              1                          3         if (~rst_n) begin
+    31              1                          8         end else if (rd_en && !empty) begin
+                                              18     All False Count
+Branch totals: 3 hits of 3 branches = 100.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              4         3         1      75.0
+
+================================Condition Details================================
+
+Condition Coverage for file rtl/synch_fifo.v --
+
+----------------Focused Condition View-------------------
+Line       19 Item    1  (wr_en && ~full)
+Condition totals: 1 of 2 input terms covered = 50.0%
+
+  Input Term   Covered  Reason for no coverage   Hint
+ -----------  --------  -----------------------  --------------
+       wr_en         Y
+        full         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  wr_en_0               -                             
+  Row   2:          1  wr_en_1               ~full                         
+  Row   3:          1  full_0                wr_en                         
+  Row   4:    ***0***  full_1                wr_en                         
+
+----------------Focused Condition View-------------------
+Line       31 Item    1  (rd_en && ~empty)
+Condition totals: 2 of 2 input terms covered = 100.0%
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                     94        65        29      69.1
+
+================================Toggle Details================================
+
+Toggle Coverage for File rtl/synch_fifo.v --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+          2                                  rst_n           0           1       50.00 
+         11                              wr_ptr[7]           0           0        0.00 
+         11                              wr_ptr[6]           0           0        0.00 
+         11                              wr_ptr[5]           0           0        0.00 
+         11                              wr_ptr[4]           0           0        0.00 
+         11                              wr_ptr[3]           0           1       50.00 
+         11                              rd_ptr[7]           0           0        0.00 
+         11                              rd_ptr[6]           0           0        0.00 
+         11                              rd_ptr[5]           0           0        0.00 
+         11                              rd_ptr[4]           0           0        0.00 
+         11                              rd_ptr[3]           0           1       50.00 
+         12                          fifo_count[8]           0           0        0.00 
+         12                          fifo_count[7]           0           0        0.00 
+         12                          fifo_count[6]           0           0        0.00 
+         12                          fifo_count[5]           0           0        0.00 
+         12                          fifo_count[4]           0           0        0.00 
+
+Total Node Count     =         47 
+Toggled Node Count   =         31 
+Untoggled Node Count =         16 
+
+Toggle Coverage      =       69.1% (65 of 94 bins)
+
+COVERGROUP COVERAGE:
+-----------------------------------------------------------------------------------------------
+Covergroup                                             Metric       Goal    Status               
+                                                                                              
+-----------------------------------------------------------------------------------------------
+ TYPE /synch_pkg/coverage_collector/cov1                76.6%        100    Uncovered            
+    covered/total bins:                                    12         18                      
+    missing/total bins:                                     6         18                      
+    % Hit:                                              66.6%        100                      
+    Coverpoint cov1::cov_wr_en_p                        75.0%        100    Uncovered            
+        covered/total bins:                                 3          4                      
+        missing/total bins:                                 1          4                      
+        % Hit:                                          75.0%        100                      
+    Coverpoint cov1::cov_rd_en_p                        75.0%        100    Uncovered            
+        covered/total bins:                                 3          4                      
+        missing/total bins:                                 1          4                      
+        % Hit:                                          75.0%        100                      
+    Coverpoint cov1::cov_full_p                        100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+    Coverpoint cov1::cov_empty_p                       100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+    Cross cov1::#cross__0#                              33.3%        100    Uncovered            
+        covered/total bins:                                 2          6                      
+        missing/total bins:                                 4          6                      
+        % Hit:                                          33.3%        100                      
+ CLASS coverage_collector
+ Covergroup instance \/synch_pkg::coverage_collector::cov1  
+                                                        76.6%        100    Uncovered            
+    covered/total bins:                                    12         18                      
+    missing/total bins:                                     6         18                      
+    % Hit:                                              66.6%        100                      
+    Coverpoint cov_wr_en_p                              75.0%        100    Uncovered            
+        covered/total bins:                                 3          4                      
+        missing/total bins:                                 1          4                      
+        % Hit:                                          75.0%        100                      
+        bin wr_en_1                                         9          1    Covered              
+        bin wr_en_0                                         9          1    Covered              
+        bin wr_en_1_0                                       1          1    Covered              
+        bin wr_en_0_1                                       0          1    ZERO                 
+    Coverpoint cov_rd_en_p                              75.0%        100    Uncovered            
+        covered/total bins:                                 3          4                      
+        missing/total bins:                                 1          4                      
+        % Hit:                                          75.0%        100                      
+        bin rd_en_1                                         9          1    Covered              
+        bin rd_en_0                                         9          1    Covered              
+        bin rd_en_1_0                                       0          1    ZERO                 
+        bin rd_en_0_1                                       1          1    Covered              
+    Coverpoint cov_full_p                              100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin full_1                                          1          1    Covered              
+        bin full_0                                         17          1    Covered              
+    Coverpoint cov_empty_p                             100.0%        100    Covered              
+        covered/total bins:                                 2          2                      
+        missing/total bins:                                 0          2                      
+        % Hit:                                         100.0%        100                      
+        bin empty_1                                         3          1    Covered              
+        bin empty_0                                        15          1    Covered              
+    Cross #cross__0#                                    33.3%        100    Uncovered            
+        covered/total bins:                                 2          6                      
+        missing/total bins:                                 4          6                      
+        % Hit:                                          33.3%        100                      
+        ignore_bin wr_rd_en_11                              0               ZERO                 
+        bin wr_rd_en_10                                     9          1    Covered              
+        bin wr_rd_en_01                                     9          1    Covered              
+        bin <wr_en_0,rd_en_0>                               0          1    ZERO                 
+        bin <wr_en_1_0,rd_en_0>                             0          1    ZERO                 
+        bin <wr_en_0,rd_en_1_0>                             0          1    ZERO                 
+        bin <wr_en_1_0,rd_en_1_0>                           0          1    ZERO                 
+
+TOTAL COVERGROUP COVERAGE: 76.6%  COVERGROUP TYPES: 1
+
+ASSERTION RESULTS:
+-------------------------------------------------------
+Name                 File(Line)           Failure Pass 
+                                          Count   Count 
+-------------------------------------------------------
+/synch_pkg/write_sequence/body/#ublk#77471255#14/immed__17
+                     ./tb_classes/write_sequence.svh(17)       0     1
+/synch_pkg/read_sequence/body/#ublk#77471255#14/immed__17
+                     ./tb_classes/read_sequence.svh(17)       0     1
+
+Total Coverage By File (code coverage only, filtered view): 86.0%
+
+End time: 21:37:30 on Jan 06,2025, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
