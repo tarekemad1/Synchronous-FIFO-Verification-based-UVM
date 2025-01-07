@@ -12,14 +12,14 @@ class coverage_collector extends uvm_subscriber#(sequence_item);
         cov_wr_en_p : coverpoint item.wr_en {
             bins wr_en_1   = {1'b1}; 
             bins wr_en_0   = {1'b0};
-            bins wr_en_1_0 = (1'b1 => 1'b0);
-            bins wr_en_0_1 = (1'b0 => 1'b1);
+            bins wr_Toggle_H_L_ = (1'b1 => 1'b0);
+            bins wr_Toggle_L_H = (1'b0 => 1'b1);
         }
         cov_rd_en_p : coverpoint item.rd_en {
             bins rd_en_1 = {1'b1}; 
             bins rd_en_0 = {1'b0};
-            bins rd_en_1_0 = (1'b1 => 1'b0);
-            bins rd_en_0_1 = (1'b0 => 1'b1);
+            bins rd_Toggle_H_L = (1'b1 => 1'b0);
+            bins rd_Toggle_L_H = (1'b0 => 1'b1);
         }
         cov_full_p  : coverpoint item.full {
             bins full_1 = {1'b1}; 
@@ -30,11 +30,7 @@ class coverage_collector extends uvm_subscriber#(sequence_item);
             bins empty_0 = {1'b0};
         } 
 
-        cross cov_wr_en_p, cov_rd_en_p {
-            bins wr_rd_en_10 = binsof(cov_wr_en_p) intersect {1'b1} && binsof(cov_rd_en_p) intersect {1'b0};
-            bins wr_rd_en_01 = binsof(cov_wr_en_p) intersect {1'b0} && binsof(cov_rd_en_p) intersect {1'b1};
-            ignore_bins wr_rd_en_11 = binsof(cov_wr_en_p) intersect {1'b1} && binsof(cov_rd_en_p) intersect {1'b1};
-        }
+
     endgroup
 
     // constructor

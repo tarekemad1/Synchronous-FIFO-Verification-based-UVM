@@ -2,7 +2,7 @@ class full_test extends uvm_test;
     `uvm_component_utils (full_test)
 
     env    env_h;
-    SerialSeq serialseq_h;
+    SerialSeq serialseq_h,serialseq_h2;
 
     // constructor
     function new(string name = "full_test", uvm_component parent);
@@ -27,7 +27,6 @@ task run_phase (uvm_phase phase);
     phase.raise_objection(this);
 
     serialseq_h=SerialSeq::type_id::create("serialseq_h");
-
     serialseq_h.start(env_h.agnt.sqr);
     
     phase.drop_objection(this);
